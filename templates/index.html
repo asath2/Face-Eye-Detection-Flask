@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Live Streaming</title>
+    <style>
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .video-container {
+            display: inline-block;
+            position: relative;
+            width: 70%;
+            max-width: 800px; /* Limit maximum width */
+            overflow: hidden; /* Hide overflow for rounded corners */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+            transition: transform 0.3s ease-in-out; /* Smooth transform animation */
+        }
+
+        .video-container:hover {
+            transform: scale(1.05); /* Scale up on hover */
+        }
+
+        .video-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px; /* Add rounded corners to the image */
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
+        }
+
+        .video-container h3 {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="video-container">
+            <h3>Live Streaming</h3>
+            <img src="{{ url_for('video_feed') }}" alt="Live Video Feed">
+        </div>
+    </div>
+
+    <!-- Additional Features -->
+    <script>
+        // JavaScript for additional features
+        document.addEventListener('DOMContentLoaded', function () {
+            const videoContainer = document.querySelector('.video-container');
+
+            // Add click event to toggle fullscreen mode
+            videoContainer.addEventListener('click', function () {
+                if (!document.fullscreenElement) {
+                    videoContainer.requestFullscreen().catch(err => {
+                        console.error('Error attempting to enable full-screen mode:', err.message);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            // Add animation when entering fullscreen
+            document.addEventListener('fullscreenchange', function () {
+                if (document.fullscreenElement === videoContainer) {
+                    videoContainer.style.transition = 'none'; // Disable transition temporarily
+                    videoContainer.style.transform = 'scale(1.2)'; // Scale up slightly when entering fullscreen
+                    setTimeout(function () {
+                        videoContainer.style.transition = 'transform 0.3s ease-in-out'; // Re-enable transition
+                        videoContainer.style.transform = 'scale(1)'; // Restore original scale
+                    }, 100);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
